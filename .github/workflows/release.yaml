@@ -12,8 +12,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12.x"
-      - run: yarn install
-      - run: yarn build
+      - run: npm ci
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
