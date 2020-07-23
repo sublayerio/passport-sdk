@@ -1,7 +1,8 @@
+const difference = require('lodash/difference')
 const api = require('./api')
 const jwt = require('./jwt')
 
-module.exports = ctx => async ({ refresh_token: code }) => {
+module.exports = ({ roles: requiredRoles }) => ctx => async ({ refresh_token: code }) => {
 
     console.log('code', code)
 
@@ -13,16 +14,16 @@ module.exports = ctx => async ({ refresh_token: code }) => {
         }
     })
 
-    const { refresh_token, access_token } = response.data.data
+    const { refresh_token, access_token, max_age } = response.data.data
 
     const decoded = jwt.decode(access_token)
 
-    if (['vincent@wedouble.nl', 'joost@lesautodeal.nl', 'olivier@andev.nl'].includes(decoded.email) === false) {
-        throw new Error('not authorized')
+    if (difference(requiredRoles, decoded.roles).length) {
+        throw new Error('unauthorized')
     }
 
     ctx.res.cookie('refresh_token', refresh_token, {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        maxAge: max_age ? 7 * 24 * 60 * 60 * 1000 : null,
         httpOnly: true
     })
 

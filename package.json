@@ -13,6 +13,8 @@
     "cookie-parser": "^1.4.5",
     "debug": "^4.1.1",
     "execution-time": "^1.4.1",
-    "jsonwebtoken": "^8.5.1"
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.19"
   }
 }

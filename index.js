@@ -6,10 +6,13 @@ const refreshSession = require('./refreshSession')
 const handle = require('./handle')
 const cookieParser = require('cookie-parser')
 
-const app = express()
+module.exports = ({ roles } = { roles: [] }) => {
 
-app.post('/session/logout', bodyParser.json(), cookieParser(), handle(clearSession))
-app.post('/session/create', bodyParser.json(), cookieParser(), handle(createSession))
-app.post('/session/refresh', bodyParser.json(), cookieParser(), handle(refreshSession))
+    const app = express()
 
-module.exports = app
+    app.post('/session/logout', bodyParser.json(), cookieParser(), handle(clearSession))
+    app.post('/session/create', bodyParser.json(), cookieParser(), handle(createSession({ roles })))
+    app.post('/session/refresh', bodyParser.json(), cookieParser(), handle(refreshSession))
+
+    return app
+}
